@@ -10,9 +10,11 @@ RUN apk add --no-cache \
   linux-headers
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
-COPY . /code/
+COPY pyproject.toml uv.lock /code/
 
 RUN uv sync --frozen --no-cache
+
+COPY . /code/
 
 EXPOSE 8080
 
