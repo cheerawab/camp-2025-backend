@@ -11,11 +11,14 @@ RUN apk add --no-cache \
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# Copy all source files first
-COPY . /code/
+# Copy dependency files first
+COPY pyproject.toml uv.lock /code/
 
-# Install dependencies using uv
-RUN uv sync --frozen --no-cache
+# Install dependencies using uv from lockfile
+RUN uv venv && uv pip sync uv.lock
+
+# Copy source code
+COPY main.py /code/
 
 EXPOSE 8080
 
